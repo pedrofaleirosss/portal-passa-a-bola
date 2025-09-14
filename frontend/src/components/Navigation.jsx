@@ -12,6 +12,7 @@ const Navigation = () => {
     { path: "/sobre", label: "Sobre Nós" },
     { path: "/inscricao", label: "Inscrições" },
     { path: "/cadastro", label: "Cadastro" },
+    { path: "/login", label: "Login" },
   ];
 
   return (
@@ -20,9 +21,6 @@ const Navigation = () => {
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            {/* <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">PB</span>
-            </div> */}
             <img
               src="/logo.png"
               alt="Passa a Bola Logo"
@@ -40,7 +38,6 @@ const Navigation = () => {
                 key={item.path}
                 to={item.path}
                 className={`font-medium transition-colors ${
-                  /* Usado text-primary em vez de text-purple-600 */
                   location.pathname === item.path
                     ? "text-primary"
                     : "text-gray-600 hover:text-primary"
@@ -84,7 +81,6 @@ const Navigation = () => {
                 key={item.path}
                 to={item.path}
                 className={`block py-2 font-medium transition-colors ${
-                  /* Usado text-primary em vez de text-purple-600 */
                   location.pathname === item.path
                     ? "text-primary"
                     : "text-gray-600 hover:text-primary"
