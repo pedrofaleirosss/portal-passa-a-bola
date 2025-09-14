@@ -4,49 +4,41 @@ import { useState } from "react";
 
 const CadastroPage = () => {
   const [formData, setFormData] = useState({
-    tipoUsuario: "",
     nome: "",
     email: "",
     telefone: "",
     dataNascimento: "",
-    cpf: "",
-    endereco: "",
-    cidade: "",
-    estado: "",
-    cep: "",
-    modalidadesFavoritas: [],
-    experiencia: "",
-    posicao: "",
     senha: "",
     confirmarSenha: "",
+    fotoPerfil: null,
+    posicaoPreferida: "",
+    timeAtual: "",
+    documentoOficial: null,
+    comprovanteResidencia: null,
     aceitaTermos: false,
   });
 
-  const modalidades = [
-    "Futebol",
-    "Futsal",
-    "Basquete",
-    "Vôlei",
-    "Vôlei de Praia",
-    "Handebol",
-    "Tênis",
-    "Natação",
-    "Atletismo",
-    "Outros",
+  const posicoesFutebol = [
+    "Goleiro",
+    "Lateral Direito",
+    "Lateral Esquerdo",
+    "Zagueiro Central",
+    "Volante",
+    "Meio-campo Central",
+    "Meio-campo Ofensivo",
+    "Ponta Direita",
+    "Ponta Esquerda",
+    "Centroavante",
+    "Segundo Atacante",
   ];
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked, files } = e.target;
 
-    if (type === "checkbox" && name === "modalidadesFavoritas") {
-      setFormData((prev) => ({
-        ...prev,
-        modalidadesFavoritas: checked
-          ? [...prev.modalidadesFavoritas, value]
-          : prev.modalidadesFavoritas.filter((m) => m !== value),
-      }));
-    } else if (type === "checkbox") {
+    if (type === "checkbox") {
       setFormData((prev) => ({ ...prev, [name]: checked }));
+    } else if (type === "file") {
+      setFormData((prev) => ({ ...prev, [name]: files[0] }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
@@ -65,9 +57,17 @@ const CadastroPage = () => {
       return;
     }
 
+    const hoje = new Date();
+    const nascimento = new Date(formData.dataNascimento);
+    const idade = hoje.getFullYear() - nascimento.getFullYear();
+
+    if (idade < 16) {
+      alert("Idade mínima para cadastro é 16 anos!");
+      return;
+    }
+
     console.log("Dados do cadastro:", formData);
     alert("Cadastro realizado com sucesso! Bem-vindo à Passa A Bola!");
-    // Aqui você integraria com o backend
   };
 
   return (
@@ -79,8 +79,8 @@ const CadastroPage = () => {
             Cadastre-se na <span className="text-primary">Passa A Bola</span>
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Junte-se à nossa comunidade esportiva! Crie sua conta e tenha acesso
-            a todos os campeonatos e eventos exclusivos.
+            Junte-se à nossa comunidade de futebol! Crie sua conta e tenha
+            acesso a todos os campeonatos e torneios de futebol.
           </p>
         </div>
       </section>
@@ -98,49 +98,49 @@ const CadastroPage = () => {
 
                 <div className="space-y-4">
                   <div className="flex items-start space-x-3">
-                    <span className="text-green-500 text-xl">✅</span>
+                    <span className="text-green-500 text-xl">⚽</span>
                     <div>
                       <h4 className="font-semibold text-gray-900">
-                        Inscrições Prioritárias
+                        Campeonatos de Futebol
                       </h4>
                       <p className="text-sm text-gray-600">
-                        Acesso antecipado aos campeonatos
+                        Acesso a todos os torneios
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-start space-x-3">
-                    <span className="text-green-500 text-xl">✅</span>
+                    <span className="text-green-500 text-xl">🏆</span>
                     <div>
                       <h4 className="font-semibold text-gray-900">
-                        Histórico Completo
+                        Histórico de Jogos
                       </h4>
                       <p className="text-sm text-gray-600">
-                        Acompanhe suas participações
+                        Acompanhe suas estatísticas
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-start space-x-3">
-                    <span className="text-green-500 text-xl">✅</span>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">
-                        Eventos Exclusivos
-                      </h4>
-                      <p className="text-sm text-gray-600">
-                        Convites para eventos especiais
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start space-x-3">
-                    <span className="text-green-500 text-xl">✅</span>
+                    <span className="text-green-500 text-xl">👥</span>
                     <div>
                       <h4 className="font-semibold text-gray-900">
                         Networking
                       </h4>
                       <p className="text-sm text-gray-600">
-                        Conecte-se com outros atletas
+                        Conecte-se com outros jogadores
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-3">
+                    <span className="text-green-500 text-xl">🎯</span>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">
+                        Eventos Especiais
+                      </h4>
+                      <p className="text-sm text-gray-600">
+                        Convites para peneiras e clínics
                       </p>
                     </div>
                   </div>
@@ -152,236 +152,226 @@ const CadastroPage = () => {
             <div className="lg:col-span-3">
               <div className="card">
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">
-                  Criar Conta
+                  Criar Conta de Jogador
                 </h3>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Tipo de Usuário */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Tipo de Usuário *
-                    </label>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      {["atleta", "tecnico", "organizador"].map((tipo) => (
-                        <label
-                          key={tipo}
-                          className="flex items-center space-x-3 p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50"
-                        >
-                          <input
-                            type="radio"
-                            name="tipoUsuario"
-                            value={tipo}
-                            checked={formData.tipoUsuario === tipo}
-                            onChange={handleChange}
-                            className="text-purple-600"
-                          />
-                          <span className="capitalize font-medium">{tipo}</span>
+                  <div className="border-b border-gray-200 pb-6">
+                    <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                      📋 Informações Obrigatórias
+                    </h4>
+
+                    {/* Dados Pessoais */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Nome Completo *
                         </label>
-                      ))}
-                    </div>
-                  </div>
+                        <input
+                          type="text"
+                          name="nome"
+                          value={formData.nome}
+                          onChange={handleChange}
+                          required
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          placeholder="Seu nome completo"
+                        />
+                      </div>
 
-                  {/* Dados Pessoais */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Nome Completo *
-                      </label>
-                      <input
-                        type="text"
-                        name="nome"
-                        value={formData.nome}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                        placeholder="Seu nome completo"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Data de Nascimento *
-                      </label>
-                      <input
-                        type="date"
-                        name="dataNascimento"
-                        value={formData.dataNascimento}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Email *
-                      </label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                        placeholder="seu@email.com"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Telefone *
-                      </label>
-                      <input
-                        type="tel"
-                        name="telefone"
-                        value={formData.telefone}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                        placeholder="(11) 99999-9999"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      CPF *
-                    </label>
-                    <input
-                      type="text"
-                      name="cpf"
-                      value={formData.cpf}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                      placeholder="000.000.000-00"
-                    />
-                  </div>
-
-                  {/* Endereço */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Endereço
-                      </label>
-                      <input
-                        type="text"
-                        name="endereco"
-                        value={formData.endereco}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                        placeholder="Rua, número, bairro"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        CEP
-                      </label>
-                      <input
-                        type="text"
-                        name="cep"
-                        value={formData.cep}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                        placeholder="00000-000"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Cidade
-                      </label>
-                      <input
-                        type="text"
-                        name="cidade"
-                        value={formData.cidade}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                        placeholder="Sua cidade"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Estado
-                      </label>
-                      <select
-                        name="estado"
-                        value={formData.estado}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                      >
-                        <option value="">Selecione</option>
-                        <option value="SP">São Paulo</option>
-                        <option value="RJ">Rio de Janeiro</option>
-                        <option value="MG">Minas Gerais</option>
-                        {/* Adicionar outros estados */}
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* Modalidades Favoritas */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Modalidades de Interesse
-                    </label>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                      {modalidades.map((modalidade) => (
-                        <label
-                          key={modalidade}
-                          className="flex items-center space-x-2"
-                        >
-                          <input
-                            type="checkbox"
-                            name="modalidadesFavoritas"
-                            value={modalidade}
-                            checked={formData.modalidadesFavoritas.includes(
-                              modalidade
-                            )}
-                            onChange={handleChange}
-                            className="text-purple-600"
-                          />
-                          <span className="text-sm">{modalidade}</span>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Data de Nascimento *
                         </label>
-                      ))}
+                        <input
+                          type="date"
+                          name="dataNascimento"
+                          value={formData.dataNascimento}
+                          onChange={handleChange}
+                          required
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          Idade mínima: 16 anos
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Email *
+                        </label>
+                        <input
+                          type="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          required
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          placeholder="seu@email.com"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          Usado para login e comunicação
+                        </p>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Telefone/WhatsApp *
+                        </label>
+                        <input
+                          type="tel"
+                          name="telefone"
+                          value={formData.telefone}
+                          onChange={handleChange}
+                          required
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          placeholder="(11) 99999-9999"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          Para notificações importantes
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Senhas */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Senha *
+                        </label>
+                        <input
+                          type="password"
+                          name="senha"
+                          value={formData.senha}
+                          onChange={handleChange}
+                          required
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          placeholder="Mínimo 8 caracteres"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Confirmar Senha *
+                        </label>
+                        <input
+                          type="password"
+                          name="confirmarSenha"
+                          value={formData.confirmarSenha}
+                          onChange={handleChange}
+                          required
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          placeholder="Repita a senha"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Foto de Perfil */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Foto de Perfil
+                      </label>
+                      <input
+                        type="file"
+                        name="fotoPerfil"
+                        onChange={handleChange}
+                        accept="image/*"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        Opcional no início - para identificação e crachá digital
+                      </p>
                     </div>
                   </div>
 
-                  {/* Senhas */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Senha *
-                      </label>
-                      <input
-                        type="password"
-                        name="senha"
-                        value={formData.senha}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                        placeholder="Mínimo 8 caracteres"
-                      />
-                    </div>
+                  <div className="border-b border-gray-200 pb-6">
+                    <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                      ⚽ Informações de Futebol
+                    </h4>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Confirmar Senha *
-                      </label>
-                      <input
-                        type="password"
-                        name="confirmarSenha"
-                        value={formData.confirmarSenha}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                        placeholder="Repita a senha"
-                      />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Posição Preferida *
+                        </label>
+                        <select
+                          name="posicaoPreferida"
+                          value={formData.posicaoPreferida}
+                          onChange={handleChange}
+                          required
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        >
+                          <option value="">Selecione sua posição</option>
+                          {posicoesFutebol.map((posicao) => (
+                            <option key={posicao} value={posicao}>
+                              {posicao}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Time Atual ou de Referência
+                        </label>
+                        <input
+                          type="text"
+                          name="timeAtual"
+                          value={formData.timeAtual}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          placeholder="Ex: Santos FC, Independente, etc."
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          Pode ser "Independente" se não tem time
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="border-b border-gray-200 pb-6">
+                    <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                      📎 Documentos (Opcionais)
+                    </h4>
+                    <p className="text-sm text-gray-600 mb-4">
+                      Estes documentos são opcionais agora, mas serão
+                      obrigatórios na validação final para participar dos
+                      campeonatos.
+                    </p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Documento Oficial (RG/CPF)
+                        </label>
+                        <input
+                          type="file"
+                          name="documentoOficial"
+                          onChange={handleChange}
+                          accept="image/*,.pdf"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          Upload opcional - será necessário para validação final
+                        </p>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Comprovante de Residência/Escolaridade
+                        </label>
+                        <input
+                          type="file"
+                          name="comprovanteResidencia"
+                          onChange={handleChange}
+                          accept="image/*,.pdf"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          Se houver restrição de categoria (ex: universitário)
+                        </p>
+                      </div>
                     </div>
                   </div>
 
@@ -408,9 +398,25 @@ const CadastroPage = () => {
                     </label>
                   </div>
 
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div className="flex items-start space-x-3">
+                      <span className="text-blue-500 text-xl">ℹ️</span>
+                      <div>
+                        <h4 className="font-semibold text-blue-900">
+                          Importante
+                        </h4>
+                        <p className="text-sm text-blue-700">
+                          Para se inscrever em campeonatos, seu perfil deve
+                          estar criado e ativo. Documentos podem ser enviados
+                          posteriormente antes da validação final.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Botão de Envio */}
                   <button type="submit" className="btn-primary w-full">
-                    Criar Conta
+                    Criar Conta de Jogador
                   </button>
                 </form>
 
@@ -418,7 +424,7 @@ const CadastroPage = () => {
                   <p className="text-gray-600">
                     Já tem uma conta?
                     <a
-                      href="#"
+                      href="/login"
                       className="text-purple-600 hover:underline ml-1"
                     >
                       Faça login
