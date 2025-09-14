@@ -1,14 +1,18 @@
 import { MdOutlineEmail } from "react-icons/md";
-import { FaPhoneAlt } from "react-icons/fa";
 import { IoLocationSharp } from "react-icons/io5";
-import { FaFacebook } from "react-icons/fa";
-import { FaInstagram } from "react-icons/fa";
-import { FaTiktok } from "react-icons/fa";
-import { FaYoutube } from "react-icons/fa";
+import {
+  FaWhatsapp,
+  FaPhoneAlt,
+  FaFacebook,
+  FaInstagram,
+  FaTiktok,
+  FaYoutube,
+  FaSpotify,
+} from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white py-12">
+    <footer className="bg-primary text-white py-12">
       <div className="container">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo e Descrição */}
@@ -31,31 +35,45 @@ const Footer = () => {
             <div className="flex space-x-4">
               <a
                 href="https://www.facebook.com/oficialpassaabola/?locale=pt_BR"
-                className="text-gray-300 hover:text-primary transition-colors"
+                className="text-gray-300 hover:text-white transition-colors"
               >
                 <span className="sr-only">Facebook</span>
                 <FaFacebook size={24} />
               </a>
               <a
                 href="https://www.instagram.com/passaabola"
-                className="text-gray-300 hover:text-primary transition-colors"
+                className="text-gray-300 hover:text-white transition-colors"
               >
                 <span className="sr-only">Instagram</span>
                 <FaInstagram size={24} />
               </a>
               <a
                 href="https://www.tiktok.com/@passabola"
-                className="text-gray-300 hover:text-primary transition-colors"
+                className="text-gray-300 hover:text-white transition-colors"
               >
                 <span className="sr-only">Tik Tok</span>
                 <FaTiktok size={24} />
               </a>
               <a
                 href="https://www.youtube.com/@passabola"
-                className="text-gray-300 hover:text-primary transition-colors"
+                className="text-gray-300 hover:text-white transition-colors"
               >
                 <span className="sr-only">YouTube</span>
                 <FaYoutube size={24} />
+              </a>
+              <a
+                href="https://www.whatsapp.com/channel/0029Vavm10347XeEyTTNi91i"
+                className="text-gray-300 hover:text-white transition-colors"
+              >
+                <span className="sr-only">WhatsApp</span>
+                <FaWhatsapp size={24} />
+              </a>
+              <a
+                href="https://open.spotify.com/show/18H1ysI9zyDIRahuCnZGQr?si=32d5583dfaa84544"
+                className="text-gray-300 hover:text-white transition-colors"
+              >
+                <span className="sr-only">Spotify</span>
+                <FaSpotify size={24} />
               </a>
             </div>
           </div>
@@ -75,7 +93,7 @@ const Footer = () => {
               <li>
                 <a
                   href="/sobre"
-                  className="text-gray-300 hover:text-primary transition-colors"
+                  className="text-gray-300 hover:text-white transition-colors"
                 >
                   Sobre Nós
                 </a>
@@ -83,7 +101,7 @@ const Footer = () => {
               <li>
                 <a
                   href="/inscricao"
-                  className="text-gray-300 hover:text-primary transition-colors"
+                  className="text-gray-300 hover:text-white transition-colors"
                 >
                   Inscrições
                 </a>
@@ -91,9 +109,17 @@ const Footer = () => {
               <li>
                 <a
                   href="/cadastro"
-                  className="text-gray-300 hover:text-primary transition-colors"
+                  className="text-gray-300 hover:text-white transition-colors"
                 >
                   Cadastro
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/login"
+                  className="text-gray-300 hover:text-white transition-colors"
+                >
+                  Login
                 </a>
               </li>
             </ul>
@@ -118,8 +144,8 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
-          <p>&copy; 2024 Passa A Bola. Todos os direitos reservados.</p>
+        <div className="border-t border-primary-foreground/20 mt-8 pt-8 text-center text-gray-300">
+          <p>&copy; 2025 Passa A Bola. Todos os direitos reservados.</p>
         </div>
       </div>
     </footer>
