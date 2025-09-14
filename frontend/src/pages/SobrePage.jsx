@@ -73,62 +73,30 @@ const SobrePage = () => {
                 Nossa História
               </h2>
               <p className="text-gray-600 mb-4">
-                A Passa A Bola nasceu em 2018 com o sonho de democratizar o
-                acesso ao esporte competitivo. Começamos organizando pequenos
-                torneios de futebol no bairro e, ao longo dos anos, expandimos
-                para diversas modalidades esportivas.
+                A Passa a Bola nasceu com o propósito de fortalecer o futebol
+                feminino e dar mais visibilidade às mulheres no esporte.
               </p>
               <p className="text-gray-600 mb-4">
-                Hoje, somos referência na organização de campeonatos esportivos,
-                tendo já realizado mais de 50 eventos e conectado centenas de
-                atletas em toda a região.
+                Desde sua criação, o projeto tem se dedicado a compartilhar
+                conteúdos exclusivos nas redes sociais, organizando iniciativas
+                como o Campeonato Passa a Bola, que conecta atletas, equipes e
+                torcedores em um espaço de valorização e representatividade.
               </p>
               <p className="text-gray-600">
-                Nossa missão é simples: proporcionar oportunidades para que
-                todos possam viver a emoção do esporte competitivo, independente
-                do nível ou experiência.
+                Mais do que uma página, a Passa a Bola se tornou uma comunidade,
+                construída por quem acredita no potencial transformador do
+                futebol feminino no Brasil.
               </p>
             </div>
             <div className="bg-gradient-to-br from-purple-100 to-blue-100 rounded-2xl p-8 text-center">
-              <div className="text-6xl mb-4">🏟️</div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">6 Anos</h3>
-              <p className="text-gray-600">
-                de experiência organizando eventos esportivos
-              </p>
+              <img src="/foto-sobre.jpg" alt="Sobre a Passa A Bola" />
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Nossos Valores */}
-      <section className="py-16 bg-gray-50">
-        <div className="container">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Nossos Valores
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Os princípios que guiam nossa atuação e definem quem somos como
-              empresa.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {valores.map((valor, index) => (
-              <div key={index} className="card text-center">
-                <div className="text-4xl mb-4">{valor.icon}</div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  {valor.titulo}
-                </h3>
-                <p className="text-gray-600">{valor.descricao}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>
 
       {/* Nossa Equipe */}
-      <section className="py-16">
+      <section className="py-16 bg-gray-50">
         <div className="container">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -182,6 +150,33 @@ const SobrePage = () => {
               <div className="text-4xl font-bold mb-2">98%</div>
               <div className="text-purple-100">Satisfação</div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Nossos Valores */}
+      <section className="py-16">
+        <div className="container">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Nossos Valores
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Os princípios que guiam nossa atuação e definem quem somos como
+              empresa.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {valores.map((valor, index) => (
+              <div key={index} className="card text-center">
+                <div className="text-4xl mb-4">{valor.icon}</div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  {valor.titulo}
+                </h3>
+                <p className="text-gray-600">{valor.descricao}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
