@@ -40,24 +40,44 @@ const HomePage = () => {
       icon: "📘",
       cor: "bg-blue-600",
       descricao: "Acompanhe nossos eventos e interaja com a comunidade",
+      link: "https://www.facebook.com/oficialpassaabola/?locale=pt_BR",
     },
     {
       nome: "Instagram",
       icon: "📷",
       cor: "bg-gradient-to-br from-purple-600 to-pink-600",
       descricao: "Fotos e stories dos melhores momentos",
+      link: "https://www.instagram.com/passaabola",
     },
     {
-      nome: "Twitter",
-      icon: "🐦",
-      cor: "bg-blue-400",
-      descricao: "Resultados em tempo real e atualizações",
+      nome: "TikTok",
+      icon: "🎵",
+      cor: "bg-black",
+      descricao: "Mulheres no futebol e um pouco da nossa vida 🤪",
+      link: "https://www.tiktok.com/@passabola",
     },
     {
       nome: "YouTube",
       icon: "📺",
       cor: "bg-red-600",
       descricao: "Melhores lances e transmissões ao vivo",
+      link: "https://www.youtube.com/@passabola",
+    },
+    {
+      nome: "WhatsApp",
+      icon: "💬",
+      cor: "bg-green-500",
+      descricao:
+        "Esse é o nosso portal de notícias, curiosidades da modalidade e também de bastidores da nossa vida.",
+      link: "https://www.whatsapp.com/channel/0029Vavm10347XeEyTTNi91i",
+    },
+    {
+      nome: "Spotify",
+      icon: "🎧",
+      cor: "bg-green-600",
+      descricao:
+        "Agora o Passa Bola tem um podcast, ou melhor, um PABCAST, o Fala, Bebê.",
+      link: "https://open.spotify.com/show/18H1ysI9zyDIRahuCnZGQr?si=32d5583dfaa84544",
     },
   ];
 
@@ -168,7 +188,7 @@ const HomePage = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
             {redesSociais.map((rede) => (
               <div key={rede.nome} className="card text-center">
                 <div
@@ -179,10 +199,84 @@ const HomePage = () => {
                 <h3 className="font-semibold mb-2">{rede.nome}</h3>
                 <p className="text-sm text-gray-600 mb-4">{rede.descricao}</p>
                 <button className="btn-secondary text-sm">
-                  {rede.nome === "YouTube" ? "Inscrever" : "Seguir"}
+                  <a href={rede.link}>Acessar</a>
                 </button>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="py-16 bg-white">
+        <div className="container">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl font-bold mb-4 text-gray-900">
+              📧 Receba Nossas Novidades
+            </h2>
+            <p className="text-gray-600 mb-8 text-lg">
+              Seja o primeiro a saber sobre novos campeonatos, resultados, dicas
+              de treino e oportunidades exclusivas. Cadastre-se em nossa
+              newsletter e não perca nenhum lance!
+            </p>
+
+            <div className="bg-primary/5 border border-primary/20 rounded-2xl p-8 mb-8">
+              <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                <input
+                  type="email"
+                  placeholder="Seu melhor e-mail"
+                  className="flex-1 px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="px-6 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-colors"
+                >
+                  Inscrever-se
+                </button>
+              </form>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-3">
+                  <span className="text-2xl">🏆</span>
+                </div>
+                <h3 className="font-semibold mb-2 text-primary">
+                  Resultados em Primeira Mão
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Receba os resultados dos jogos assim que saírem
+                </p>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-3">
+                  <span className="text-2xl">📅</span>
+                </div>
+                <h3 className="font-semibold mb-2 text-primary">
+                  Novos Campeonatos
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Seja notificado sobre inscrições e datas importantes
+                </p>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-3">
+                  <span className="text-2xl">💡</span>
+                </div>
+                <h3 className="font-semibold mb-2 text-primary">
+                  Dicas Exclusivas
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Conteúdo especial para melhorar seu desempenho
+                </p>
+              </div>
+            </div>
+
+            <p className="text-gray-500 text-sm mt-6">
+              📧 Enviamos apenas conteúdo relevante • 🔒 Seus dados estão
+              seguros • ❌ Cancele quando quiser
+            </p>
           </div>
         </div>
       </section>
