@@ -27,25 +27,18 @@ const SobrePage = () => {
 
   const equipe = [
     {
-      nome: "Carlos Silva",
-      cargo: "Diretor Geral",
+      nome: "Luana Maluf",
+      cargo: "Apresentadora",
       descricao:
-        "Ex-atleta profissional com 15 anos de experiência em gestão esportiva.",
-      foto: "👨‍💼",
+        "Luana Maluf é jornalista esportiva e comentarista, com passagem por grandes veículos de mídia. Apaixonada por futebol, se destaca pela análise leve e acessível, trazendo visibilidade para o esporte feminino e novos olhares sobre o jogo. Atualmente integra o time da GE TV, canal digital da Globo.",
+      foto: "/luana.png",
     },
     {
-      nome: "Ana Santos",
-      cargo: "Coordenadora de Eventos",
+      nome: "Alê Xavier",
+      cargo: "Apresentadora",
       descricao:
-        "Especialista em organização de campeonatos e eventos esportivos.",
-      foto: "👩‍💼",
-    },
-    {
-      nome: "Roberto Lima",
-      cargo: "Diretor Técnico",
-      descricao:
-        "Árbitro certificado e consultor em regulamentações esportivas.",
-      foto: "👨‍🏫",
+        "Alê Xavier vive o futebol de coração — comentarista, apresentadora e voz ativa na representatividade esportiva. Junto com a Luana Maluf, faz o “Passa a Bola” acontecer, mostrando que futebol também é coisa de mulheres que jogam, falam, se apaixonam pelo campo.",
+      foto: "/ale.png",
     },
   ];
 
@@ -108,15 +101,26 @@ const SobrePage = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="flex flex-wrap justify-center gap-8 mx-auto">
             {equipe.map((membro, index) => (
-              <div key={index} className="card text-center">
-                <div className="text-6xl mb-4">{membro.foto}</div>
+              <div
+                key={index}
+                className="card text-center group hover:shadow-lg transition-shadow duration-300 max-w-[500px]"
+              >
+                <div className="w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden bg-gray-100 border-4 border-primary/20 group-hover:border-primary/40 transition-colors duration-300">
+                  <img
+                    src={membro.foto}
+                    alt={`Foto de ${membro.nome}`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-1">
                   {membro.nome}
                 </h3>
                 <p className="font-medium mb-3 text-primary">{membro.cargo}</p>
-                <p className="text-gray-600">{membro.descricao}</p>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {membro.descricao}
+                </p>
               </div>
             ))}
           </div>
@@ -124,7 +128,7 @@ const SobrePage = () => {
       </section>
 
       {/* Estatísticas */}
-      <section className="py-16 bg-gradient-to-br from-purple-600 to-blue-600 text-white">
+      <section className="py-16 bg-gradient-to-br from-purple-800 to-primary text-white">
         <div className="container">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Nossos Números</h2>
@@ -133,7 +137,7 @@ const SobrePage = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div className="grid grid-cols-3 md:grid-cols-3 gap-8 text-center">
             <div>
               <div className="text-4xl font-bold mb-2">500+</div>
               <div className="text-purple-100">Atletas Cadastrados</div>
@@ -141,10 +145,6 @@ const SobrePage = () => {
             <div>
               <div className="text-4xl font-bold mb-2">50+</div>
               <div className="text-purple-100">Eventos Realizados</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold mb-2">25+</div>
-              <div className="text-purple-100">Modalidades</div>
             </div>
             <div>
               <div className="text-4xl font-bold mb-2">98%</div>
