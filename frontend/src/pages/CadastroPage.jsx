@@ -11,26 +11,10 @@ const CadastroPage = () => {
     senha: "",
     confirmarSenha: "",
     fotoPerfil: null,
-    posicaoPreferida: "",
-    timeAtual: "",
     documentoOficial: null,
     comprovanteResidencia: null,
     aceitaTermos: false,
   });
-
-  const posicoesFutebol = [
-    "Goleiro",
-    "Lateral Direito",
-    "Lateral Esquerdo",
-    "Zagueiro Central",
-    "Volante",
-    "Meio-campo Central",
-    "Meio-campo Ofensivo",
-    "Ponta Direita",
-    "Ponta Esquerda",
-    "Centroavante",
-    "Segundo Atacante",
-  ];
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -287,51 +271,6 @@ const CadastroPage = () => {
 
                   <div className="border-b border-gray-200 pb-6">
                     <h4 className="text-lg font-semibold text-gray-900 mb-4">
-                      ⚽ Informações de Futebol
-                    </h4>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Posição Preferida *
-                        </label>
-                        <select
-                          name="posicaoPreferida"
-                          value={formData.posicaoPreferida}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                        >
-                          <option value="">Selecione sua posição</option>
-                          {posicoesFutebol.map((posicao) => (
-                            <option key={posicao} value={posicao}>
-                              {posicao}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Time Atual ou de Referência
-                        </label>
-                        <input
-                          type="text"
-                          name="timeAtual"
-                          value={formData.timeAtual}
-                          onChange={handleChange}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                          placeholder="Ex: Santos FC, Independente, etc."
-                        />
-                        <p className="text-xs text-gray-500 mt-1">
-                          Pode ser "Independente" se não tem time
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="border-b border-gray-200 pb-6">
-                    <h4 className="text-lg font-semibold text-gray-900 mb-4">
                       📎 Documentos (Opcionais)
                     </h4>
                     <p className="text-sm text-gray-600 mb-4">
@@ -407,8 +346,9 @@ const CadastroPage = () => {
                         </h4>
                         <p className="text-sm text-blue-700">
                           Para se inscrever em campeonatos, seu perfil deve
-                          estar criado e ativo. Documentos podem ser enviados
-                          posteriormente antes da validação final.
+                          estar criado e ativo. Informações esportivas
+                          específicas serão solicitadas durante a inscrição no
+                          campeonato.
                         </p>
                       </div>
                     </div>
@@ -424,7 +364,7 @@ const CadastroPage = () => {
                   <p className="text-gray-600">
                     Já tem uma conta?
                     <a
-                      href="/login"
+                      href="#"
                       className="text-purple-600 hover:underline ml-1"
                     >
                       Faça login
