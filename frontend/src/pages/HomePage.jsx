@@ -14,22 +14,22 @@ const HomePage = () => {
     },
     {
       id: 2,
-      modalidade: "Basquete",
-      titulo: "Liga de Basquete Urbano",
+      modalidade: "Futebol",
+      titulo: "Liga de Futebol Amador",
       descricao:
-        "Competição de basquete 3x3 nas quadras da cidade. Venha mostrar suas habilidades.",
+        "Competição de futebol 11x11 para jogadoras amadoras. Venha mostrar suas habilidades.",
       data: "20 Dez",
-      participantes: "16 times",
+      participantes: "24 times",
       premio: "R$ 2.500",
     },
     {
       id: 3,
-      modalidade: "Vôlei",
-      titulo: "Torneio de Vôlei de Praia",
+      modalidade: "Society",
+      titulo: "Torneio de Futebol Society",
       descricao:
-        "Competição na areia com as melhores duplas da região. Diversão garantida!",
+        "Futebol society 7x7 em campo sintético. Diversão e competição garantidas!",
       data: "25 Dez",
-      participantes: "24 duplas",
+      participantes: "16 times",
       premio: "R$ 1.500",
     },
   ];
@@ -167,7 +167,7 @@ const HomePage = () => {
                   to="/inscricao"
                   className="btn-primary w-full text-center block"
                 >
-                  Inscrever Time
+                  Fazer Inscrição
                 </Link>
               </div>
             ))}
