@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { API_URL } from "../api";
+import Swal from "sweetalert2";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +11,7 @@ const LoginPage = () => {
     senha: "",
     lembrarMe: false,
   });
+  const [mensagem, setMensagem] = useState("");
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -20,7 +23,7 @@ const LoginPage = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!formData.email || !formData.senha) {
@@ -28,9 +31,37 @@ const LoginPage = () => {
       return;
     }
 
-    console.log("Dados do login:", formData);
-    alert("Login realizado com sucesso! Bem-vindo de volta!");
-    // Aqui você integraria com o backend para autenticação
+    try {
+      const res = await fetch(`${API_URL}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        setMensagem(`Bem-vinda, ${data.jogadora.nome}!`);
+        // se quiser guardar a jogadora no localStorage:
+        localStorage.setItem("jogadora", JSON.stringify(data.jogadora));
+        Swal.fire({
+          title: "Bem-vinda!",
+          text: "Login realizado com sucesso!",
+          icon: "success",
+        });
+      } else {
+        setMensagem(`Erro: ${data.error}`);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: `Erro ao realizar login: ${
+            data.error || JSON.stringify(data.errors)
+          }`,
+        });
+      }
+    } catch (erro) {
+      setMensagem("Erro de conexão com o servidor.");
+      console.log(erro);
+    }
   };
 
   return (
@@ -188,6 +219,11 @@ const LoginPage = () => {
                   <button type="submit" className="btn-primary w-full">
                     Entrar na Conta
                   </button>
+                  {mensagem && (
+                    <p className="mt-4 text-center text-purple-700 font-medium">
+                      {mensagem}
+                    </p>
+                  )}
                 </form>
 
                 {/* Link para Cadastro */}

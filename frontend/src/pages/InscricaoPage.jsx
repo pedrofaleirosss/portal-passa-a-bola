@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { API_URL } from "../api";
+import Swal from "sweetalert2";
 
 const InscricaoPage = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +13,7 @@ const InscricaoPage = () => {
     disponibilidade: "",
     observacoes: "",
   });
+  const [mensagem, setMensagem] = useState("");
 
   const posicoesFutebol = [
     "Goleiro",
@@ -40,11 +43,38 @@ const InscricaoPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Dados da inscrição:", formData);
-    alert("Inscrição realizada com sucesso! Entraremos em contato em breve.");
-    // Aqui você integraria com o backend
+    try {
+      const jogadoraId = JSON.parse(localStorage.getItem("jogadora"))?.id;
+      const res = await fetch(`${API_URL}/inscricoes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, jogadoraId }),
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        setMensagem("Inscrição realizada com sucesso!");
+        Swal.fire({
+          title: "Sucesso!",
+          text: "Inscrição realizada com sucesso!",
+          icon: "success",
+        });
+      } else {
+        setMensagem(`Erro: ${data.error || JSON.stringify(data.errors)}`);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: `Erro ao realizar inscrição: ${
+            data.error || JSON.stringify(data.errors)
+          }`,
+        });
+      }
+    } catch (erro) {
+      setMensagem("Erro de conexão com o servidor.");
+      console.error("Erro ao enviar inscrição:", erro);
+    }
   };
 
   return (
@@ -304,6 +334,11 @@ const InscricaoPage = () => {
                       Limpar Formulário
                     </button>
                   </div>
+                  {mensagem && (
+                    <p className="mt-4 text-center text-purple-700 font-medium">
+                      {mensagem}
+                    </p>
+                  )}
                 </form>
               </div>
             </div>

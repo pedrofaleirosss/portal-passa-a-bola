@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { API_URL } from "../api";
+import Swal from "sweetalert2";
 
 const CadastroPage = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +17,7 @@ const CadastroPage = () => {
     comprovanteResidencia: null,
     aceitaTermos: false,
   });
+  const [mensagem, setMensagem] = useState("");
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -28,30 +31,38 @@ const CadastroPage = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.senha !== formData.confirmarSenha) {
-      alert("As senhas não coincidem!");
-      return;
+    try {
+      const res = await fetch(`${API_URL}/jogadoras`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        setMensagem("Jogadora cadastrada com sucesso!");
+        Swal.fire({
+          title: "Sucesso!",
+          text: "Cadastro realizado com sucesso! Você já pode fazer login.",
+          icon: "success",
+        });
+      } else {
+        setMensagem(`Erro: ${data.error || JSON.stringify(data.errors)}`);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: `Erro ao realizar cadastro: ${
+            data.error || JSON.stringify(data.errors)
+          }`,
+        });
+      }
+    } catch (erro) {
+      setMensagem("Erro de conexão com o servidor.");
+      console.log(erro);
     }
-
-    if (!formData.aceitaTermos) {
-      alert("Você deve aceitar os termos de uso!");
-      return;
-    }
-
-    const hoje = new Date();
-    const nascimento = new Date(formData.dataNascimento);
-    const idade = hoje.getFullYear() - nascimento.getFullYear();
-
-    if (idade < 16) {
-      alert("Idade mínima para cadastro é 16 anos!");
-      return;
-    }
-
-    console.log("Dados do cadastro:", formData);
-    alert("Cadastro realizado com sucesso! Bem-vindo à Passa A Bola!");
   };
 
   return (
@@ -358,13 +369,18 @@ const CadastroPage = () => {
                   <button type="submit" className="btn-primary w-full">
                     Criar Conta de Jogador
                   </button>
+                  {mensagem && (
+                    <p className="mt-4 text-center text-purple-700 font-medium">
+                      {mensagem}
+                    </p>
+                  )}
                 </form>
 
                 <div className="mt-6 text-center">
                   <p className="text-gray-600">
                     Já tem uma conta?
                     <a
-                      href="#"
+                      href="/login"
                       className="text-purple-600 hover:underline ml-1"
                     >
                       Faça login
