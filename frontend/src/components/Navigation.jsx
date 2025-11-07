@@ -19,6 +19,7 @@ const Navigation = () => {
 
   if (token) {
     navItems.splice(3, 2);
+    navItems.push({ path: "/meu-perfil", label: "Meu Perfil" });
   }
 
   const handleLogout = () => {

@@ -210,6 +210,17 @@ app.get("/api/jogadoras", (req, res) => {
   return res.json(jogadoras.map(retornaSemSenha));
 });
 
+app.get("/api/jogadoras/:id", (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const jogadora = jogadoras.find((j) => j.id === id);
+  if (!jogadora) {
+    return res
+      .status(404)
+      .json({ success: false, error: "Jogadora não encontrada." });
+  }
+  return res.json({ success: true, jogadora: retornaSemSenha(jogadora) });
+});
+
 // Criar inscrição em campeonato
 app.post("/api/inscricoes", autenticarToken, (req, res) => {
   const {
@@ -306,6 +317,21 @@ app.get("/api/inscricoes", (req, res) => {
   });
 
   return res.json(lista);
+});
+
+// Obter inscrições por ID da jogadora
+app.get("/api/inscricoes/jogadora/:jogadoraId", (req, res) => {
+  const jogadoraId = parseInt(req.params.jogadoraId, 10);
+  const inscricoesJogadora = inscricoes.filter(
+    (i) => i.jogadoraId === jogadoraId
+  );
+  if (inscricoesJogadora.length === 0) {
+    return res
+      .status(404)
+      .json({ success: false, error: "Inscrição não encontrada." });
+  }
+
+  return res.json({ success: true, inscricoes: inscricoesJogadora });
 });
 
 // Confirmar / cancelar inscrição

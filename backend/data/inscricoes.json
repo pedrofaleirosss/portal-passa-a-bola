@@ -10,5 +10,17 @@
     "observacoes": "65611",
     "createdAt": "2025-11-07T19:04:50.566Z",
     "status": "pendente"
+  },
+  {
+    "id": 2,
+    "jogadoraId": 1,
+    "campeonato": "liga-amador",
+    "posicao": "Lateral Direito",
+    "experiencia": "Iniciante (0-1 anos)",
+    "disponibilidade": "noites-semana",
+    "time": "Independente",
+    "observacoes": "",
+    "createdAt": "2025-11-07T22:58:50.482Z",
+    "status": "pendente"
   }
 ]
