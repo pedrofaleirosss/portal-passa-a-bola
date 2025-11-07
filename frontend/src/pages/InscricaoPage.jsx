@@ -46,11 +46,20 @@ const InscricaoPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const jogadoraId = JSON.parse(localStorage.getItem("jogadora"))?.id;
+      const token = localStorage.getItem("token");
+      const jogadora = JSON.parse(localStorage.getItem("jogadora"));
+      if (!token || !jogadora) {
+        setMensagem("Você precisa estar logada para fazer uma inscrição.");
+        return;
+      }
+
       const res = await fetch(`${API_URL}/inscricoes`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, jogadoraId }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ ...formData, jogadoraId: jogadora.id }),
       });
       const data = await res.json();
 

@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "nome": "Camila",
+    "email": "teste@gmail.com",
+    "senha": "$2b$10$Fj5c5bTPiLCzWz5ud9jfyurr6A8xx8Sn8eedKqCMV1dqP8/RvXSGi",
+    "telefone": "11993600412",
+    "dataNascimento": "2000-02-20",
+    "posicao": null,
+    "criadoEm": "2025-11-07T19:02:25.517Z"
+  }
+]

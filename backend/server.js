@@ -1,18 +1,55 @@
 // server.js
 const express = require("express");
 const cors = require("cors");
+const fs = require("fs");
+const path = require("path");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const JWT_SECRET = "seu_segredo_jwt_aqui"; // Em produção, usar variável de ambiente
 
 app.use(cors());
 app.use(express.json());
 
+// ---------- Caminhos dos arquivos ----------
+const dataDir = path.join(__dirname, "data");
+const jogadorasFile = path.join(dataDir, "jogadoras.json");
+const inscricoesFile = path.join(dataDir, "inscricoes.json");
+
+// ---------- Funções utilitárias ----------
+function ensureDataFiles() {
+  if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir);
+  if (!fs.existsSync(jogadorasFile)) fs.writeFileSync(jogadorasFile, "[]");
+  if (!fs.existsSync(inscricoesFile)) fs.writeFileSync(inscricoesFile, "[]");
+}
+
+function loadJSON(filePath) {
+  try {
+    return JSON.parse(fs.readFileSync(filePath, "utf-8"));
+  } catch (error) {
+    console.error(`Erro ao ler ${filePath}:`, error);
+    return [];
+  }
+}
+
+function saveJSON(filePath, data) {
+  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+}
+
+// Inicializa arquivos se não existirem
+ensureDataFiles();
+
 // "Banco" em memória
-let jogadoras = []; // { id, nome, email, senha, telefone, dataNascimento, posicao(optional) }
-let inscricoes = []; // { id, jogadoraId, campeonato, posicao, nivel, disponibilidade, time, observacoes, createdAt }
-let proximIdJogadora = 1;
-let proximIdInscricao = 1;
+let jogadoras = loadJSON(jogadorasFile);
+let inscricoes = loadJSON(inscricoesFile);
+let proximIdJogadora = jogadoras.length
+  ? Math.max(...jogadoras.map((j) => j.id)) + 1
+  : 1;
+let proximIdInscricao = inscricoes.length
+  ? Math.max(...inscricoes.map((i) => i.id)) + 1
+  : 1;
 
 // ---------- Helpers de validação ----------
 function validaEmailBasico(email) {
@@ -27,6 +64,29 @@ function retornaSemSenha(usuario) {
   return rest;
 }
 
+function gerarToken(usuario) {
+  return jwt.sign(
+    {
+      id: usuario.id,
+      email: usuario.email,
+    },
+    JWT_SECRET,
+    { expiresIn: "2h" }
+  );
+}
+
+function autenticarToken(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (!token) return res.status(401).json({ error: "Token não fornecido." });
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ error: "Token inválido." });
+    req.user = user;
+    next();
+  });
+}
+
 // ---------- Rotas ----------
 
 // Health check
@@ -34,12 +94,8 @@ app.get("/", (req, res) => {
   res.send({ ok: true, message: "Servidor rodando" });
 });
 
-/**
- * Cadastro de jogadora
- * POST /api/jogadoras
- * body: { nome, email, senha, confirmPassword, telefone, dataNascimento, posicao? }
- */
-app.post("/api/jogadoras", (req, res) => {
+// Cadastro de jogadora
+app.post("/api/jogadoras", async (req, res) => {
   const {
     nome,
     email,
@@ -92,11 +148,14 @@ app.post("/api/jogadoras", (req, res) => {
       .json({ success: false, error: "Email já cadastrado." });
   }
 
+  // Criptografar a senha
+  const senhaHash = await bcrypt.hash(senha, 10);
+
   const nova = {
     id: proximIdJogadora++,
     nome: nome.trim(),
     email: email.toLowerCase(),
-    senha, // Nota: em produção, nunca salve senha em texto plano — usar bcrypt
+    senha: senhaHash,
     telefone: telefone.trim(),
     dataNascimento,
     posicao: posicao || null,
@@ -104,6 +163,8 @@ app.post("/api/jogadoras", (req, res) => {
   };
 
   jogadoras.push(nova);
+  saveJSON(jogadorasFile, jogadoras);
+
   return res.status(201).json({
     success: true,
     message: "Jogadora cadastrada.",
@@ -111,12 +172,8 @@ app.post("/api/jogadoras", (req, res) => {
   });
 });
 
-/**
- * Login simples
- * POST /api/login
- * body: { email, senha }
- */
-app.post("/api/login", (req, res) => {
+// Login
+app.post("/api/login", async (req, res) => {
   const { email, senha } = req.body;
   if (!email || !senha) {
     return res
@@ -124,37 +181,37 @@ app.post("/api/login", (req, res) => {
       .json({ success: false, error: "Email e senha são obrigatórios." });
   }
 
-  const usuario = jogadoras.find(
-    (j) => j.email === email.toLowerCase() && j.senha === senha
-  );
+  const usuario = jogadoras.find((j) => j.email === email.toLowerCase());
   if (!usuario) {
     return res
       .status(401)
       .json({ success: false, error: "Credenciais inválidas." });
   }
 
-  // Simples resposta — no futuro retornar JWT
+  const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
+  if (!senhaCorreta) {
+    return res
+      .status(401)
+      .json({ success: false, error: "Credenciais inválidas." });
+  }
+
+  const token = gerarToken(usuario);
+
   return res.json({
     success: true,
     message: "Login realizado.",
     jogadora: retornaSemSenha(usuario),
+    token,
   });
 });
 
-/**
- * Listar todas as jogadoras (sem senha)
- * GET /api/jogadoras
- */
+// Listar jogadoras
 app.get("/api/jogadoras", (req, res) => {
   return res.json(jogadoras.map(retornaSemSenha));
 });
 
-/**
- * Criar inscrição em campeonato
- * POST /api/inscricoes
- * body: { jogadoraId, campeonato, posicao, nivel, disponibilidade, time?, observacoes? }
- */
-app.post("/api/inscricoes", (req, res) => {
+// Criar inscrição em campeonato
+app.post("/api/inscricoes", autenticarToken, (req, res) => {
   const {
     jogadoraId,
     campeonato,
@@ -166,7 +223,6 @@ app.post("/api/inscricoes", (req, res) => {
   } = req.body;
   const errors = {};
 
-  // validações básicas
   if (!Number.isInteger(jogadoraId) || jogadoraId <= 0) {
     errors.jogadoraId = "ID da jogadora inválido (deve ser inteiro).";
   }
@@ -221,15 +277,14 @@ app.post("/api/inscricoes", (req, res) => {
   };
 
   inscricoes.push(nova);
+  saveJSON(inscricoesFile, inscricoes);
+
   return res
     .status(201)
     .json({ success: true, message: "Inscrição criada.", inscricao: nova });
 });
 
-/**
- * Listar inscrições (opcional query ?campeonato=Nome)
- * GET /api/inscricoes
- */
+// Listar inscrições
 app.get("/api/inscricoes", (req, res) => {
   const { campeonato } = req.query;
   let resultado = inscricoes;
@@ -240,7 +295,6 @@ app.get("/api/inscricoes", (req, res) => {
     );
   }
 
-  // enriquecer com dados da jogadora (somente nome e telefone, sem senha)
   const lista = resultado.map((i) => {
     const j = jogadoras.find((x) => x.id === i.jogadoraId);
     return {
@@ -254,11 +308,7 @@ app.get("/api/inscricoes", (req, res) => {
   return res.json(lista);
 });
 
-/**
- * Rota para confirmar/cancelar inscrição (simples)
- * PATCH /api/inscricoes/:id
- * body: { action: "confirmar" | "cancelar" }
- */
+// Confirmar / cancelar inscrição
 app.patch("/api/inscricoes/:id", (req, res) => {
   const id = parseInt(req.params.id, 10);
   const { action } = req.body;
@@ -272,6 +322,8 @@ app.patch("/api/inscricoes/:id", (req, res) => {
   if (action === "confirmar") ins.status = "confirmada";
   else if (action === "cancelar") ins.status = "cancelada";
   else return res.status(400).json({ success: false, error: "Ação inválida." });
+
+  saveJSON(inscricoesFile, inscricoes);
 
   return res.json({
     success: true,

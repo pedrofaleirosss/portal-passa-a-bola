@@ -15,6 +15,18 @@ const Navigation = () => {
     { path: "/login", label: "Login" },
   ];
 
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    navItems.splice(3, 2);
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("jogadora");
+    window.location.reload();
+  };
+
   return (
     <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
       <div className="container">
@@ -46,6 +58,15 @@ const Navigation = () => {
                 {item.label}
               </Link>
             ))}
+
+            {token && (
+              <button
+                onClick={handleLogout}
+                className="font-medium text-gray-600 hover:text-primary cursor-pointer"
+              >
+                Sair
+              </button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -90,6 +111,15 @@ const Navigation = () => {
                 {item.label}
               </Link>
             ))}
+
+            {token && (
+              <button
+                onClick={handleLogout}
+                className="block w-full text-left py-2 font-medium text-gray-600 hover:text-primary cursor-pointer"
+              >
+                Sair
+              </button>
+            )}
           </div>
         )}
       </div>

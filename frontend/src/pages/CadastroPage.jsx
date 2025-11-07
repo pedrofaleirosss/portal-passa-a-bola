@@ -3,8 +3,19 @@
 import { useState } from "react";
 import { API_URL } from "../api";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const CadastroPage = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/");
+    }
+  }, [navigate]);
+
   const [formData, setFormData] = useState({
     nome: "",
     email: "",

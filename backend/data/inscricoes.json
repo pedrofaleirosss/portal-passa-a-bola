@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "jogadoraId": 1,
+    "campeonato": "copa-passa-a-bola",
+    "posicao": "Goleiro",
+    "experiencia": "Intermediário (2-5 anos)",
+    "disponibilidade": "fins-de-semana",
+    "time": "Independente",
+    "observacoes": "65611",
+    "createdAt": "2025-11-07T19:04:50.566Z",
+    "status": "pendente"
+  }
+]

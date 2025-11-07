@@ -1,11 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { API_URL } from "../api";
 import Swal from "sweetalert2";
+import { useEffect } from "react";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/");
+    }
+  }, [navigate]);
+
   const [formData, setFormData] = useState({
     email: "",
     senha: "",
@@ -39,15 +49,17 @@ const LoginPage = () => {
       });
       const data = await res.json();
 
-      if (res.ok) {
+      if (res.ok && data.token) {
         setMensagem(`Bem-vinda, ${data.jogadora.nome}!`);
         // se quiser guardar a jogadora no localStorage:
         localStorage.setItem("jogadora", JSON.stringify(data.jogadora));
+        localStorage.setItem("token", data.token);
         Swal.fire({
-          title: "Bem-vinda!",
+          title: `Bem-vinda, ${data.jogadora.nome}!`,
           text: "Login realizado com sucesso!",
           icon: "success",
         });
+        navigate("/");
       } else {
         setMensagem(`Erro: ${data.error}`);
         Swal.fire({
